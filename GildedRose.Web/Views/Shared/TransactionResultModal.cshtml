@@ -3,31 +3,46 @@
         @if (Model.IsSuccessful)
         {
             <div class="modal-header">
-                Purchase Completed
+                <h4>Purchase Completed</h4>
             </div>
             <div class="modal-body">
                 <p>You have completed this transaction.</p>
-                <div class="row">
-                    <div class="col-12 text-right" id="transaction-date">
-                        <script>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Date</td>
+                            <td>Product</td>
+                            <td>Cost</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="transaction-date">@Model.EntityResults.TransactionDate</td>
+                            <td>@Model.EntityResults.ProductPurchased.Name</td>
+                            <td>$@Model.EntityResults.ProductPurchased.UnitCost</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <script>
                             $("#transaction-date").html(moment.utc('@Model.EntityResults.TransactionDate').local()
-                                .format('YYYY-MM-DD HH:mm:ss'));
-                        </script>
-                    </div>
-                    <div class="col-6">Item</div>
-                    <div class="col-6 text-right">
-                        @* If the app every gets multi item purchases, we would iterate through and create a line item for each.*@
-                        @Model.EntityResults.ProductPurchased.Name - $@Model.EntityResults.ProductPurchased.UnitCost
-                    </div>
-                </div>
+                                .format('YYYY-MM-DD HH:mm'));
+                </script>
                 <div class="text-center">
-                    <a asp-action="TransactionHistory" asp-controller="Account">View Transaction History</a>
+                    <a asp-action="TransactionHistory" asp-controller="Account" class="btn btn-primary">View Transaction History</a>
                 </div>
-                
             </div>
             <div class="modal-footer text-right">
                 <button class="btn rounded-0" data-dismiss="modal">Close</button>
             </div>
+            <script>
+                $(function () {
+                    if (window.updateStock) {
+                        window.updateStock('@Model.EntityResults.ProductPurchased.StockCount');
+                    }
+                })
+
+            </script>
         }
         else
         {
@@ -39,21 +54,31 @@
                 @if (Model.EntityResults != null)
                 {
                     <div class="row">
-                        <div class="col-12 text-right" id="transaction-date">
-                            <script>
-                        $("#transaction-date").html(moment.utc('@Model.EntityResults.TransactionDate').local().format('YYYY-MM-DD HH:mm:ss'));
-                            </script>
-                        </div>
-                        <div class="col-6">Item</div>
-                        <div class="col-6 text-right">
-                            @* If the app every gets multi item purchases, we would iterate through and create a line item for each.*@
-                            @Model.EntityResults.ProductPurchased - $@Model.EntityResults.ProductPurchased.UnitCost
-                        </div>
                         <div class="col-12">
                             <h6>Failure Reason:</h6>
                             <p>@Model.ErrorMessage</p>
                         </div>
                     </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Product</td>
+                                <td>Cost</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="transaction-date">@Model.EntityResults.TransactionDate</td>
+                                <td>@Model.EntityResults.ProductPurchased.Name</td>
+                                <td>$@Model.EntityResults.ProductPurchased.UnitCost</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script>
+                            $("#transaction-date").html(moment.utc('@Model.EntityResults.TransactionDate').local()
+                                .format('YYYY-MM-DD HH:mm:ss'));
+                    </script>
 
                 }
                 else
