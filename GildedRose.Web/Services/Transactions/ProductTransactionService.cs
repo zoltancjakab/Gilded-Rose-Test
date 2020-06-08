@@ -31,7 +31,7 @@ namespace GildedRose.Web.Services.Transactions
 
                 if (user == null)
                 {
-                    return ServiceResult.Failure<TransactionModel>("Unable to purchase product. User Id is null. Please log in.");
+                    return ServiceResult.Failure<TransactionModel>("Unable to purchase product. Please log in.");
                 }
 
                 //check if product stock is above 0. If below 0, we do not allow it to be modified.
@@ -71,7 +71,7 @@ namespace GildedRose.Web.Services.Transactions
                 //commit our database transaction
                 await transaction.CommitAsync();
 
-                //retrieve the product result after we decrement the product count.
+                //retrieve the product result after we decrement the product count. we already know this product exists.
                 var productResult = await _db.Products.AsExpandable().Where(x => x.Id == productId).Select(x => productBuilder.Invoke(x)).FirstOrDefaultAsync();
                 //return a copy of the transaction for user display. This object will also be used to update the stock count locally.
                 return ServiceResult<TransactionModel>.Success(new TransactionModel()
