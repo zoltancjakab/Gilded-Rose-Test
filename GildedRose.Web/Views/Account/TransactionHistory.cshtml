@@ -1,0 +1,53 @@
+﻿@model List<GildedRose.Web.Services.Transactions.ViewModels.TransactionModel>
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<h2>Transaction History</h2>
+@if (Model.Any()) { 
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>Date</td>
+            <td>Product Purchased</td>
+            <td>Cost</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OrderByDescending(x=>x.TransactionDate))
+        {
+            <tr>
+                <td data-local-time="@item.TransactionDate">@item.TransactionDate</td>
+                <td><a asp-controller="Home" asp-action="ProductInformation" asp-route-productId="@item.ProductPurchased.Id">@item.ProductPurchased.Name</a></td>
+                <td>$@item.ProductPurchased.UnitCost</td>
+            </tr>
+        }
+
+        </tbody>
+    </table>
+    <script>
+        $(function() {
+            var times = $("[data-local-time]");
+            for (let i = 0; i < times.length; i++) {
+                var dateTime = $(times[i]).data('local-time');
+                var localTime = moment.utc(dateTime).local()
+                    .format('YYYY-MM-DD HH:mm');
+
+                $(times[i]).html(localTime);
+            }
+        })
+        
+    </script>
+
+}
+else
+{
+    <hr />
+    <div class="card shadow">
+        <div class="card-body text-center p-5">
+            <h4>No Transaction History</h4>
+            <p>You have not purchased anything yet.</p>
+        </div>
+    </div>
+}

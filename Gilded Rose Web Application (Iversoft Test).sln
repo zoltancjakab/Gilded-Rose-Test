@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GildedRose.Web", "GildedRose.Web\GildedRose.Web.csproj", "{CBE95819-8858-464E-9C0A-605412514E52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBE95819-8858-464E-9C0A-605412514E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBE95819-8858-464E-9C0A-605412514E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBE95819-8858-464E-9C0A-605412514E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBE95819-8858-464E-9C0A-605412514E52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1223DDD0-170E-48DD-B477-01DBBFEC8195}
+	EndGlobalSection
+EndGlobal

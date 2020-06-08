@@ -1,0 +1,38 @@
+﻿@model GildedRose.Web.Services.Products.ViewModels.ProductModel
+
+    <div class="card shadow-sm rounded-0 w-100 h-100">
+        @if (Model.Images.Any())
+        {
+            <img class="card-img-top img-fluid" src="@Model.Images.FirstOrDefault().ImageContent"/>
+        }
+        else
+        {
+            <img class="card-img-top img-fluid" src="~/images/no-img-default.png" />
+        }
+        <div class="card-body border-top">
+            <h5 class="card-title">
+                @Model.Name
+            </h5>
+            <h6 class="card-subtitle d-flex flex-row flex-grow-1">
+                @if (Model.StockCount >= 5)
+                {
+                    <span class="badge badge-success">@Model.StockCount In Stock!</span>
+                }
+                else if (Model.StockCount < 5 && Model.StockCount > 0)
+                {
+                    <span class="badge badge-warning">Only @Model.StockCount In Stock!</span>
+                }
+                else
+                {
+                    <span class="badge badge-danger">Out of Stock!</span>
+                }
+                <span class="badge badge-secondary ml-1">$ @Model.UnitCost</span>
+            </h6>
+            <p class="card-text gr-text-fade-3">
+                @Model.Description
+            </p>
+            <div class="d-flex flex-row flex-grow-1 flex-row-reverse">
+                <a class="btn btn-primary rounded-0" asp-action="ProductInformation" asp-route-productId="@Model.Id">View</a>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,79 @@
+﻿@model GildedRose.Web.Services.ServiceResult<GildedRose.Web.Services.Transactions.ViewModels.TransactionModel>
+
+        @if (Model.IsSuccessful)
+        {
+            <div class="modal-header">
+                Purchase Completed
+            </div>
+            <div class="modal-body">
+                <p>You have completed this transaction.</p>
+                <div class="row">
+                    <div class="col-12 text-right" id="transaction-date">
+                        <script>
+                            $("#transaction-date").html(moment.utc('@Model.EntityResults.TransactionDate').local()
+                                .format('YYYY-MM-DD HH:mm:ss'));
+                        </script>
+                    </div>
+                    <div class="col-6">Item</div>
+                    <div class="col-6 text-right">
+                        @* If the app every gets multi item purchases, we would iterate through and create a line item for each.*@
+                        @Model.EntityResults.ProductPurchased.Name - $@Model.EntityResults.ProductPurchased.UnitCost
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a asp-action="TransactionHistory" asp-controller="Account">View Transaction History</a>
+                </div>
+                
+            </div>
+            <div class="modal-footer text-right">
+                <button class="btn rounded-0" data-dismiss="modal">Close</button>
+            </div>
+        }
+        else
+        {
+            <div clas="modal-header">
+                Purchase Failure
+            </div>
+            <div clas="modal-body">
+                <p>Your transaction could not be completed.</p>
+                @if (Model.EntityResults != null)
+                {
+                    <div class="row">
+                        <div class="col-12 text-right" id="transaction-date">
+                            <script>
+                        $("#transaction-date").html(moment.utc('@Model.EntityResults.TransactionDate').local().format('YYYY-MM-DD HH:mm:ss'));
+                            </script>
+                        </div>
+                        <div class="col-6">Item</div>
+                        <div class="col-6 text-right">
+                            @* If the app every gets multi item purchases, we would iterate through and create a line item for each.*@
+                            @Model.EntityResults.ProductPurchased - $@Model.EntityResults.ProductPurchased.UnitCost
+                        </div>
+                        <div class="col-12">
+                            <h6>Failure Reason:</h6>
+                            <p>@Model.ErrorMessage</p>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-12 text-right" id="transaction-date">
+                            <script>
+                        $("#transaction-date").html(moment.utc('@DateTime.UtcNow').local().format('YYYY-MM-DD HH:mm:ss'));
+                            </script>
+                        </div>
+                        @* No items to display.*@
+                        <div class="col-12">
+                            <h6>Failure Reason:</h6>
+                            <p>@Model.ErrorMessage</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div clas="modal-footer text-right">
+                <button class="btn rounded-0" data-dismiss="modal">Close</button>
+            </div>
+        }
+

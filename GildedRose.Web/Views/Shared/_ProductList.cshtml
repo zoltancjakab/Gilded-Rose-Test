@@ -1,0 +1,22 @@
+﻿@model List<GildedRose.Web.Services.Products.ViewModels.ProductModel>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var product in Model)
+    {
+        <div class="col-12 col-md-4 col-xl-4">
+            @{ await Html.RenderPartialAsync("_ProductCard", product); }
+        </div>
+    }
+}
+else
+{
+    <div class="col-12">
+        <div class="card w-100">
+            <div class="card-body text-center p-5">
+                <h3>No Products Found!</h3>
+                <p class="text-muted">Perhaps try widening your search criteria?</p>
+            </div>
+        </div>
+    </div>
+}

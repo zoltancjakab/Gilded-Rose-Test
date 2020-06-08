@@ -1,0 +1,67 @@
+﻿@model GildedRose.Web.Models.Home.ProductSearchViewModel
+
+<div class="form-group row text-center">
+    <div class="col-12">
+        <img src="/images/logo-250px.png" alt="The Gilded Rose" class="img-fluid gr-title-logo" />
+    </div>
+    <div class="col-12">
+        <h2 class="gr-title">The Gilded Rose</h2>
+    </div>
+    <div class="col-12">
+        <h3 class="gr-subtitle"><i>Explore our fantastic variety of stylish, high quality, premium products.</i></h3>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-12">
+        <input id="search-bar" class="form-control form-control-lg rounded-0 gr-placeholder-center" placeholder="Start typing to search..." />
+    </div>
+</div>
+
+<div id="product-container" class="form-group row">
+    @{ await Html.RenderPartialAsync("_ProductList", Model.SearchResults); }
+</div>
+<div id="loading-indicator" style="display: none" >
+    <div class="d-flex flex-column align-items-center">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <br />
+        <h4>Searching</h4>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $("#search-bar").on('keyup',
+            function () {
+                $("#loading-indicator").show();
+                $("#product-container").hide();
+                var searchTerm = $(this).val();
+                $.post({
+                    url: '@Url.Action("SearchProducts")',
+                    data: {
+                        searchTerm: searchTerm,
+                    },
+                    success: function (data) {
+                        setTimeout(function() {
+                                $("#product-container").html(data);
+                                $("#loading-indicator").hide();
+                                $("#product-container").fadeIn(500);
+                            },
+                            500); //we'll add this so that users know the app is loading. 
+
+                    }
+                });
+
+            });
+    });
+
+</script>
