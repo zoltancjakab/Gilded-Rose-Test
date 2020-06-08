@@ -1,3 +1,5 @@
 .vs/
 GildedRose.Web/bin/
 GildedRose.Web/obj/
+GildedRose.Tests/bin/
+GildedRose.Tests/obj/
