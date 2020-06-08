@@ -20,14 +20,12 @@ namespace GildedRose.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
         private readonly IProductTransactionService _productTransactionService;
 
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService, IProductTransactionService productTransactionService, UserManager<User> userManager)
+        public HomeController(IProductService productService, IProductTransactionService productTransactionService, UserManager<User> userManager)
         {
-            _logger = logger;
             _productService = productService;
             _productTransactionService = productTransactionService;
         }
