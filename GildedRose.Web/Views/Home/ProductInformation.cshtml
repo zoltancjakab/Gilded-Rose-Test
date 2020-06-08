@@ -76,16 +76,17 @@
             <p class="gr-text-upper">
                 @if (Model.StockCount >= 5)
                 {
-                    <span class="text-success">@Model.StockCount In Stock!</span>
+                    <span class="text-success" id="stock-count-container"><span id="stock-count">@Model.StockCount</span> In Stock!</span>
                 }
                 else if (Model.StockCount < 5 && Model.StockCount > 0)
                 {
-                    <span class="text-warning">Only @Model.StockCount In Stock!</span>
+                    <span class="text-warning" id="stock-count-container"><span id="stock-count">@Model.StockCount</span>  In Stock!</span>
                 }
                 else
                 {
-                    <span class="badge badge-danger gr-badge-full">Out of Stock!</span>
+                    <span class="text-danger" id="stock-count-container"><span id="stock-count">@Model.StockCount</span>  In Stock!</span>
                 }
+
             </p>
         </div>
 
@@ -94,17 +95,13 @@
         <div class="mt-5">
             @if (User.Identity.IsAuthenticated)
             {
-                <button class="btn btn-success rounded-0 text-center w-100" data-toggle="modal" data-target="#purchase-modal">Purchase</button>
+                @if(Model.StockCount > 0)
+                {
+                <button class="btn btn-success rounded-0 text-center w-100" data-toggle="modal" data-target="#purchase-modal" id="purchase-button">Purchase</button>
                 <div id="purchase-modal" class="modal fade">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div id="purchase-modal-content">
-                                <div class="modal-header"><h4 class="mb-0">Finalize Purchase</h4></div>
-                                <div class="modal-body">You are about to purchase one <b>@Model.Name</b>. Confirm your purchase?</div>
-                                <div class="modal-footer text-right">
-                                    <button class="btn rounded-0 text-primary" data-dismiss="modal">Cancel</button>
-                                    <button class="btn btn-success rounded-0" id="confirm-purchase">Confirm</button>
-                                </div>
                             </div>
                             <div id="loading-indicator" class="p-4" style="display: none">
                                 <div class="d-flex flex-column align-items-center">
@@ -129,32 +126,81 @@
 
 
                 <script>
-                //js on confirm purchase, ajax call the request. receive a transaction result partial that we will populate into our modal.
-                $("#confirm-purchase").on("click",
-                function () {
-                $("#purchase-modal-content").hide();
-                $("#loading-indicator").show();
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("PurchaseProduct","Home", new{ProductId = Model.Id})",
-                        success: function(data) {
-                            $("#purchase-modal-content").html(data);
-                            $("#loading-indicator").hide();
-                            $("#purchase-modal-content").show();
-                        }
-                    });
-                });
+                    $("#purchase-button").on('click', function () {
+                        console.log("Displaying the template")
+                        $("#purchase-modal-content").html($("#purchase-modal-base").html())
+                    })
+
+                    //js on confirm purchase, ajax call the request. receive a transaction result partial that we will populate into our modal.
+                    $("#purchase-modal").on("click","#confirm-purchase",
+                        function () {
+                        $("#purchase-modal-content").hide();
+                        $("#loading-indicator").show();
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("PurchaseProduct","Home", new{ProductId = Model.Id})",
+                                success: function(data) {
+                                    $("#purchase-modal-content").html(data);
+                                    $("#loading-indicator").hide();
+                                    $("#purchase-modal-content").show();
+                                }
+                            });
+                        });
 
 
                 </script>
+                } else
+                {
+                    <button class="btn btn-secondary rounded-0 text-center w-100" disabled>Out Of Stock</button>
+                }
             }
-            else
+            else //we force unathenticated users to log in.
             {
                 <a asp-area="Identity" asp-page="/Account/Login" asp-route-returlUrl="@Url.Action("ProductInformation","Home", new{productId = Model.Id})" class="btn btn-primary rounded-0 text-center w-100">Log In to Purchase</a>
             }
-
         </div>
     </div>
 </div>
 
+<template id="purchase-modal-base">
+    <div class="modal-header"><h4 class="mb-0">Finalize Purchase</h4></div>
+    <div class="modal-body">
+        <p>You are about to pruchase the following.</p>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td>@Model.Name</td>
+                    <td>$@Model.UnitCost</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer text-right">
+        <button class="btn rounded-0 text-primary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-success rounded-0" id="confirm-purchase">Confirm</button>
+    </div>
+</template>
 
+<template id="out-of-stock">
+    <button class="btn btn-secondary rounded-0 text-center w-100" disabled>Out Of Stock</button>
+</template>
+
+<script>
+    function updateStock(stockCount) {
+        console.log(stockCount)
+        var container = $("#stock-count-container")
+        container.removeClass();
+        if (stockCount == 0) {
+            container.addClass("text-danger");
+            $("#purchase-button").replaceWith($("#out-of-stock").html())
+
+
+        } else if (stockCount > 0 && stockCount <= 5) {
+            container.addClass("text-warning");
+        } else {
+            container.addClass("text-success");
+        }
+        $("#stock-count").html(stockCount);
+
+    }
+</script>

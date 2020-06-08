@@ -27,7 +27,11 @@ namespace GildedRose.Web.Services.Products
         /// <param name="searchTerm">The search term. Can be partial or complete.</param>
         /// <param name="page">Which page to view. This way the database isn't hit with a 'query everything' command</param>
         /// <returns>A list of product models that match the search criteria, wrapped in a service result.</returns>
-        Task<ServiceResult<List<ProductModel>>> SearchProductsAsync(string searchTerm = null, int page = 1, int itemsPerPage = 10);
+        
+        Task<ServiceResult<List<ProductModel>>> SearchProductsAsync(string searchTerm = null);
+
+        //alt method, with paging.
+        //Task<ServiceResult<List<ProductModel>>> SearchProductsAsync(string searchTerm = null, int page = 1, int itemsPerPage = 10);
 
         /// <summary>
         /// Queries for a single product.

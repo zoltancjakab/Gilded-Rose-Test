@@ -35,8 +35,8 @@ namespace GildedRose.Web
             services.AddDbContext<GildedRoseDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<User,IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+            //Note - we would change false to true in a production setting.
+            services.AddIdentity<User,IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<GildedRoseDbContext>()
                 .AddDefaultTokenProviders();
 

@@ -31,7 +31,7 @@ namespace GildedRose.Web.Services.Transactions
 
                 if (user == null)
                 {
-                    return ServiceResult.Failure<TransactionModel>("Unable to purchase product. User Id is null. Please log in.");
+                    return ServiceResult.Failure<TransactionModel>("Unable to purchase product. Please log in.");
                 }
 
                 //check if product stock is above 0. If below 0, we do not allow it to be modified.
@@ -48,7 +48,7 @@ namespace GildedRose.Web.Services.Transactions
                 }
 
                 var productBuilder = ProductModel.Build();
-                var productResult = await _db.Products.AsExpandable().Where(x => x.Id == productId).Select(x=> productBuilder.Invoke(x)).FirstOrDefaultAsync();
+                
                 //create a transaction object to track the user purchasing an object.
                 //track UTC time, because its a universal format - we convert times on the front end using this standard because it uses the local time of the client browser. 
                 //We'll use moment.js because it's MIT licensed and can convert our format really easily.
@@ -71,6 +71,8 @@ namespace GildedRose.Web.Services.Transactions
                 //commit our database transaction
                 await transaction.CommitAsync();
 
+                //retrieve the product result after we decrement the product count. we already know this product exists.
+                var productResult = await _db.Products.AsExpandable().Where(x => x.Id == productId).Select(x => productBuilder.Invoke(x)).FirstOrDefaultAsync();
                 //return a copy of the transaction for user display. This object will also be used to update the stock count locally.
                 return ServiceResult<TransactionModel>.Success(new TransactionModel()
                 {

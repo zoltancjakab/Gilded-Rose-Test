@@ -49,9 +49,9 @@ namespace GildedRose.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> SearchProducts(string searchTerm, int p = 1)
+        public async Task<IActionResult> SearchProducts(string searchTerm)
         {
-            var result = await _productService.SearchProductsAsync(searchTerm, p);
+            var result = await _productService.SearchProductsAsync(searchTerm);
             
             return PartialView("_ProductList", result.EntityResults);
         }

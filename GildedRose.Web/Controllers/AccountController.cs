@@ -12,7 +12,7 @@ namespace GildedRose.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private IProductTransactionService _productTransactionService { get; set; }
+        private IProductTransactionService _productTransactionService;
 
         public AccountController(IProductTransactionService productTransactionService)
         {
