@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-GildedRose.Web-38761422-0912-4B50-B199-EFDE8366864B")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("GildedRose.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]

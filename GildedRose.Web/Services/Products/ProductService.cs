@@ -15,12 +15,10 @@ namespace GildedRose.Web.Services.Products
     {
 
         private readonly GildedRoseDbContext _db;
-        private readonly IConfiguration _configuration;
 
-        public ProductService(GildedRoseDbContext db, IConfiguration configuration)
+        public ProductService(GildedRoseDbContext db)
         {
             _db = db;
-            _configuration = configuration;
         }
 
 
@@ -55,18 +53,15 @@ namespace GildedRose.Web.Services.Products
             return ServiceResult.Failure("Unable to purchase product.");
         }
 
-        public async Task<ServiceResult<List<ProductModel>>> SearchProductsAsync(string searchTerm = null, int page = 1, int itemsPerPage = 10)
+        public async Task<ServiceResult<List<ProductModel>>> SearchProductsAsync(string searchTerm = null)
         {
             var productBuilder = ProductModel.Build();
-            //let the user control from the app settings how many products to display.
-            //We've also added an optional override to allow for certain methods to query only a certain amount of products.
-            int.TryParse(_configuration["ItemsPerPage"], out itemsPerPage);
-
             var query = _db.Products.AsExpandable();
 
             if (searchTerm != null)
                 query = query.Where(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm));
-            query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
+            //if we implement paging, we would want a property for pages and property for items per page.
+            //query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
 
             var data = await query
                 .Select(x => productBuilder.Invoke(x))
